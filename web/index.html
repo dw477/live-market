@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Live Market Workstation</title>
+  <link rel="stylesheet" href="/web/style.css">
+  <script defer src="/web/vendor/vue.global.prod.js"></script>
+  <script defer src="/web/vendor/lightweight-charts.standalone.production.js"></script>
+  <script defer src="/web/dashboard.js"></script>
+</head>
+<body>
+  <main id="app">
+    <header>
+      <div>
+        <p class="label">Yahoo Finance · 1 minute</p>
+        <h1>BTC / USD</h1>
+      </div>
+      <div class="controls">
+        <button @click="toggleReplay">{{ replaying ? 'Back to feed' : 'Replay' }}</button>
+        <button @click="toggleOutage" :disabled="!connected || replaying">
+          {{ status.simulated ? 'Resume feed' : 'Simulate outage' }}
+        </button>
+      </div>
+    </header>
+    <section class="panel" aria-label="Market chart">
+      <div class="metrics">
+        <div><span class="label">Feed</span><strong class="state" :data-state="feedState">{{ feedState }}</strong></div>
+        <div><span class="label">{{ replaying ? 'Recorded source time' : 'Latest quote (UTC)' }}</span><strong>{{ sourceTime }}</strong></div>
+        <div><span class="label">{{ replaying ? 'Delay at receipt' : 'Data age' }}</span><strong>{{ age }}</strong></div>
+        <div><span class="label">SQLite observation</span><strong>{{ observationLabel }}</strong></div>
+      </div>
+      <div class="chart-title">Price (USD) / Volume <span>{{ candleState }}</span></div>
+      <div ref="chartElement" id="chart" aria-label="BTC-USD candlestick and volume chart"></div>
+      <p class="notice" role="status">{{ notice }}</p>
+    </section>
+  </main>
+</body>
+</html>
